@@ -17,10 +17,11 @@ builds:
     goarch: [amd64]
     env:
       - CGO_ENABLED=1
-      # Tell Go to use the MingW compiler we just installed
       - CC=x86_64-w64-mingw32-gcc
+      - CXX=x86_64-w64-mingw32-g++
     ldflags:
       - -s -w -H=windowsgui -X main.version={{.Version}}
+      - -extldflags "-static -static-libgcc -static-libstdc++"
 
 archives:
   - name_template: "midi-sk8_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
