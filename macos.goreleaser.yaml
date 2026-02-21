@@ -1,0 +1,36 @@
+version: 2
+project_name: midi-sk8
+
+builds:
+  - id: macos
+    main: .
+    env:
+      - CGO_ENABLED=1
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+
+archives:
+  - name_template: "midi-sk8_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format: tar.gz
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+  groups:
+    - title: 'New Features'
+      regexp: "^.*feat[(\\w)]*:+.*$"
+      order: 0
+    - title: 'Fixes'
+      regexp: "^.*fix[(\\w)]*:+.*$"
+      order: 1
+    - title: 'Build & CI'
+      regexp: "^.*build[(\\w)]*:+.*$"
+      order: 2

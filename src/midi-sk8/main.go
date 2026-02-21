@@ -123,10 +123,13 @@ func (s *AppState) flash() {
 	}()
 }
 
+// This variable is populated by the -X ldflag in goreleaser
+var version = "dev"
+
 func main() {
 	a := app.NewWithID("com.sk8r.midi-udp")
 	a.Settings().SetTheme(customTheme{theme.LightTheme()})
-	w := a.NewWindow("midi-sk8")
+	w := a.NewWindow("midi-sk8 " + version)
 	w.SetIcon(fyne.NewStaticResource("icon.png", iconBytes))
 
 	s := &AppState{
@@ -259,7 +262,7 @@ func main() {
 	})
 
 	indicatorBox := container.NewStack(container.NewGridWrap(fyne.NewSize(14, 14), s.indicator))
-	header := container.NewBorder(nil, nil, container.NewHBox(themeBtn, settingsToggle), container.NewHBox(indicatorBox, pauseBtn, clearBtn), widget.NewLabelWithStyle("MIDI-SK8", fyne.TextAlignCenter, fyne.TextStyle{Bold: true}))
+	header := container.NewBorder(nil, nil, container.NewHBox(themeBtn, settingsToggle), container.NewHBox(indicatorBox, pauseBtn, clearBtn), widget.NewLabelWithStyle("MIDI-SK8 " + version, fyne.TextAlignCenter, fyne.TextStyle{Bold: true}))
 	
 	logStack := container.NewVSplit(
 		container.NewBorder(widget.NewLabelWithStyle("MIDI IN", 0, fyne.TextStyle{Italic: true}), nil, nil, nil, s.midiLog),

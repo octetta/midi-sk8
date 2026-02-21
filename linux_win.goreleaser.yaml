@@ -1,0 +1,47 @@
+version: 2
+project_name: midi-sk8
+
+builds:
+  - id: linux
+    main: .
+    goos: [linux]
+    goarch: [amd64]
+    env:
+      - CGO_ENABLED=1
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+
+  - id: windows
+    main: .
+    goos: [windows]
+    goarch: [amd64]
+    env:
+      - CGO_ENABLED=1
+      # Tell Go to use the MingW compiler we just installed
+      - CC=x86_64-w64-mingw32-gcc
+    ldflags:
+      - -s -w -H=windowsgui -X main.version={{.Version}}
+
+archives:
+  - name_template: "midi-sk8_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    format: tar.gz
+    format_overrides:
+      - goos: windows
+        format: zip
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+  groups:
+    - title: 'New Features'
+      regexp: "^.*feat[(\\w)]*:+.*$"
+      order: 0
+    - title: 'Fixes'
+      regexp: "^.*fix[(\\w)]*:+.*$"
+      order: 1
+    - title: 'Build & CI'
+      regexp: "^.*build[(\\w)]*:+.*$"
+      order: 2
